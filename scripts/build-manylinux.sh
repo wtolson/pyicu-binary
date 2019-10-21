@@ -11,27 +11,34 @@
 set -euo pipefail
 set -x
 
+# Install build dependencies
+yum install -y gpg
+
 # Ensure cache directory exists
 CACHE="/build/.cache"
 mkdir -p "${CACHE}"
 
-# Download and unpack icu4c
+# Download icu4c
 if [[ ! -f "${CACHE}/icu4c-${ICU_VERSION}-src.tgz" ]]; then
-    curl "http://download.icu-project.org/files/icu4c/${ICU_VERSION/_/.}/icu4c-${ICU_VERSION}-src.tgz" \
+    curl -L "https://github.com/unicode-org/icu/releases/download/release-${ICU_VERSION/_/-}/icu4c-${ICU_VERSION}-src.tgz" \
         > "${CACHE}/icu4c-${ICU_VERSION}-src.tgz"
 fi
 
-if [[ ! -f "${CACHE}/icu4c-src-${ICU_VERSION}.md5" ]]; then
-    curl "https://ssl.icu-project.org/files/icu4c/${ICU_VERSION/_/.}/icu4c-src-$ICU_VERSION.md5" \
-        > "${CACHE}/icu4c-src-${ICU_VERSION}.md5"
+if [[ ! -f "${CACHE}/icu4c-${ICU_VERSION}-src.tgz.asc" ]]; then
+    curl -L "https://github.com/unicode-org/icu/releases/download/release-${ICU_VERSION/_/-}/icu4c-${ICU_VERSION}-src.tgz.asc" \
+        > "${CACHE}/icu4c-${ICU_VERSION}-src.tgz.asc"
 fi
 
-(cd "${CACHE}" && grep "icu4c-$ICU_VERSION-src.tgz" "icu4c-src-$ICU_VERSION.md5" | md5sum -c -)
+# Verify
+gpg --import /build/KEYS
+gpg --verify "${CACHE}/icu4c-${ICU_VERSION}-src.tgz.asc" "${CACHE}/icu4c-${ICU_VERSION}-src.tgz"
+
+# Unpack
 tar -C /root/ -xzf "${CACHE}/icu4c-$ICU_VERSION-src.tgz"
 
 # Build and install icu4c
 cd /root/icu/source
-./configure
+PATH=/opt/python/cp38-cp38/bin:$PATH ./configure
 
 make
 make install
@@ -48,8 +55,7 @@ fi
 tar -C /root/ -xzf "${CACHE}/PyICU-$PYICU_VERSION.tar.gz"
 
 # Replace the package name
-sed -i.bak 's/^setup(name="PyICU"/setup(name="PyICU-binary"/' \
-    "/root/PyICU-$PYICU_VERSION/setup.py"
+patch --verbose -p1 -d "/root/PyICU-$PYICU_VERSION" < /build/pyicu.patch
 
 # Create the wheel packages
 for PYBIN in /opt/python/*/bin; do

@@ -1,5 +1,5 @@
-PYICU_VERSION = 2.0.3
-ICU_VERSION = 61_1
+PYICU_VERSION = 2.3.1
+ICU_VERSION = 65_1
 
 all: manylinux1_x86_64 manylinux1_i686 macosx
 
