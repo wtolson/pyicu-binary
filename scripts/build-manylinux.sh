@@ -52,7 +52,7 @@ if [[ ! -f "${CACHE}/PyICU-${PYICU_VERSION}.tar.gz" ]]; then
         "PyICU==${PYICU_VERSION}"
 fi
 
-tar -C /root/ -xzf "${CACHE}/PyICU-$PYICU_VERSION.tar.gz"
+tar -C /root/ -xmzf "${CACHE}/PyICU-$PYICU_VERSION.tar.gz"
 
 # Replace the package name
 patch --verbose -p1 -d "/root/PyICU-$PYICU_VERSION" < /build/pyicu.patch
