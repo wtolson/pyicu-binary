@@ -1,6 +1,6 @@
---- a/setup.py	2019-04-27 16:07:48.000000000 -0700
-+++ b/setup.py	2019-10-20 11:58:46.000000000 -0700
-@@ -231,9 +231,10 @@
+--- a/setup.py	2019-11-19 10:57:50.000000000 -0700
++++ b/setup.py	2019-11-19 10:58:44.000000000 -0700
+@@ -231,7 +231,7 @@
          return iterable
 
 
@@ -8,7 +8,4 @@
 +setup(name="PyICU-binary",
        description='Python extension wrapping the ICU C++ API',
        long_description=open('README.md').read(),
-+      long_description_content_type="text/markdown",
-       version=VERSION,
-       test_suite="test",
-       url='https://github.com/ovalhub/pyicu',
+       long_description_content_type="text/markdown",

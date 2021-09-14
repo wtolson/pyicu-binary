@@ -1,18 +1,15 @@
 #!/bin/bash
 
-# Create manylinux1 wheels for PyICU
+# Create manylinux wheels for PyICU
 #
 # Run this script with something like:
 #
 # docker run --rm -v `pwd`:/build \
 #     --env PYICU_VERSION=2.0.3 --env ICU_VERSION=61_1 \
-#     quay.io/pypa/manylinux1_x86_64 linux32 /build/scripts/build-manylinux.sh
+#     quay.io/pypa/manylinux_2_24_x86_64 /build/scripts/build-manylinux.sh
 
 set -euo pipefail
 set -x
-
-# Install build dependencies
-yum install -y gpg
 
 # Ensure cache directory exists
 CACHE="/build/.cache"
@@ -38,14 +35,14 @@ tar -C /root/ -xzf "${CACHE}/icu4c-$ICU_VERSION-src.tgz"
 
 # Build and install icu4c
 cd /root/icu/source
-PATH=/opt/python/cp38-cp38/bin:$PATH ./configure
+PATH=/opt/python/cp39-cp39/bin:$PATH ./runConfigureICU Linux
 
 make
 make install
 
 # Download PyICU source
 if [[ ! -f "${CACHE}/PyICU-${PYICU_VERSION}.tar.gz" ]]; then
-    /opt/python/cp36-cp36m/bin/pip download \
+    /opt/python/cp39-cp39/bin/pip download \
         --no-binary=:all: \
         --no-deps \
         --dest "${CACHE}" \
@@ -59,9 +56,6 @@ patch --verbose -p1 -d "/root/PyICU-$PYICU_VERSION" < /build/pyicu.patch
 
 # Create the wheel packages
 for PYBIN in /opt/python/*/bin; do
-    if $("${PYBIN}/python" --version 2>&1  | grep -qE '2\.6|3\.2|3\.3'); then
-        "${PYBIN}/pip" install "wheel<0.30"
-    fi
     "${PYBIN}/pip" wheel "/root/PyICU-$PYICU_VERSION/" -w /root/wheels/
 done
 

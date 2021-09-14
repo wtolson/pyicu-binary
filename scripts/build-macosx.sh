@@ -47,7 +47,7 @@ tar -C "${VENV}/src/" -xzf "${CACHE}/icu4c-${ICU_VERSION}-src.tgz"
 
 # Build icu4c
 (cd "${VENV}/src/icu/source" && \
-    ./configure --prefix="${VENV}" --enable-static --disable-shared)
+    ./runConfigureICU MacOSX --prefix="${VENV}" --enable-static --disable-shared)
 (cd "${VENV}/src/icu/source" && make)
 (cd "${VENV}/src/icu/source" && make install)
 
@@ -66,7 +66,7 @@ tar -C ${VENV}/src/ -xzf "${CACHE}/PyICU-${PYICU_VERSION}.tar.gz"
 patch --verbose -p1 -d "${VENV}/src/PyICU-${PYICU_VERSION}" < pyicu.patch
 
 # Build the macosx wheels
-PYVERSIONS="2.7 3.5 3.6 3.7 3.8"
+PYVERSIONS="3.6 3.7 3.8 3.9"
 LFLAGS="${VENV}/lib/libicui18n.a:${VENV}/lib/libicuuc.a:${VENV}/lib/libicudata.a"
 
 for PYVER in $PYVERSIONS; do
