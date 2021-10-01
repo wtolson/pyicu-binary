@@ -37,11 +37,3 @@ tar -C "${BUILD_DIR}/" -xmzf "${BUILD_DIR}/PyICU-$PYICU_VERSION.tar.gz"
 
 # Replace the package name
 patch --verbose -p1 -d "${BUILD_DIR}/PyICU-$PYICU_VERSION" < pyicu.patch
-
-
-
-LFLAGS="${VENV}/lib/libicui18n.a:${VENV}/lib/libicuuc.a:${VENV}/lib/libicudata.a"
-
-PYICU_LFLAGS="${LFLAGS}" "${VENV}/cp-${PYVER}/bin/pip" wheel \
-    -w "${VENV}/wheels" \
-    "${VENV}/src/PyICU-${PYICU_VERSION}"

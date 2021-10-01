@@ -17,6 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Prepare Linux
+        if: ${{ runner.os == 'Linux' }}
+        run: bash ./scripts/prepare-linux.sh
+
+      - name: Prepare MacOS
+        if: ${{ runner.os == 'macOS' }}
+        run: bash ./scripts/prepare-macos.sh
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.1.2
         with:
