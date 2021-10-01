@@ -15,4 +15,5 @@ manylinux-pypy_i686-image = "manylinux_2_24"
     before-all = "bash {project}/scripts/prepare-macos.sh"
 
         [tool.cibuildwheel.macos.environment]
-        PYICU_LFLAGS = "{project}build/lib/libicui18n.a:{project}build/lib/libicuuc.a:{project}build/lib/libicudata.a"
+        PATH = "${project}/build/bin:$PATH"
+        PYICU_LFLAGS = "{project}/build/lib/libicui18n.a:{project}/build/lib/libicuuc.a:{project}/build/lib/libicudata.a"
