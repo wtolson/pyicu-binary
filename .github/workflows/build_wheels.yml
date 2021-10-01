@@ -17,18 +17,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Prepare Linux
-        if: ${{ runner.os == 'Linux' }}
-        run: bash ./scripts/prepare-linux.sh
+      - name: Download source
+        run: |
+          mkdir -p src/
+          pip download \
+            --no-binary=:all: \
+            --no-deps \
+            --dest src/ \
+            "PyICU==${{ env.PYICU_VERSION }}"
+          tar -C "src/" -xmzf "src/PyICU-${{ env.PYICU_VERSION }}.tar.gz"
 
-      - name: Prepare MacOS
-        if: ${{ runner.os == 'macOS' }}
-        run: bash ./scripts/prepare-macos.sh
+      - name: Patch source
+        run: |
+          patch --verbose -p1 -d "src/PyICU-${{ env.PYICU_VERSION }}" < pyicu.patch
+          cp pyproject.toml src/PyICU-${{ env.PYICU_VERSION }}/
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.1.2
         with:
-          package-dir: ./build/PyICU-${{ env.PYICU_VERSION }}/
+          package-dir: ./src/PyICU-${{ env.PYICU_VERSION }}/
 
       - uses: actions/upload-artifact@v2
         with:

@@ -27,15 +27,3 @@ tar -C "${BUILD_DIR}/" -xzf "${BUILD_DIR}/icu4c-$ICU_VERSION-src.tgz"
 (cd "${BUILD_DIR}/icu/source" && PATH=$PYTHON_BIN:$PATH ./runConfigureICU Linux)
 (cd "${BUILD_DIR}/icu/source" && make)
 (cd "${BUILD_DIR}/icu/source" && make install)
-
-# Download PyICU source
-$PYTHON_BIN/pip download \
-    --no-binary=:all: \
-    --no-deps \
-    --dest "${BUILD_DIR}" \
-    "PyICU==${PYICU_VERSION}"
-
-tar -C "${BUILD_DIR}/" -xmzf "${BUILD_DIR}/PyICU-$PYICU_VERSION.tar.gz"
-
-# Replace the package name
-patch --verbose -p1 -d "${BUILD_DIR}/PyICU-$PYICU_VERSION" < pyicu.patch
