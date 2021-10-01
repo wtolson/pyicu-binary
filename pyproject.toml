@@ -1,0 +1,15 @@
+[tool.cibuildwheel]
+before-all-macos = "bash {project}/scripts/prepare-macos.sh"
+before-all-linux = "bash {project}/scripts/prepare-linux.sh"
+
+manylinux-x86_64-image = "manylinux_2_24"
+manylinux-i686-image = "manylinux_2_24"
+manylinux-pypy_x86_64-image = "manylinux_2_24"
+manylinux-aarch64-image = "manylinux_2_24"
+manylinux-ppc64le-image = "manylinux_2_24"
+manylinux-s390x-image = "manylinux_2_24"
+manylinux-pypy_aarch64-image = "manylinux_2_24"
+manylinux-pypy_i686-image = "manylinux_2_24"
+
+[tool.cibuildwheel.environment-macos]
+PYICU_LFLAGS = "{project}build/lib/libicui18n.a:{project}build/lib/libicuuc.a:{project}build/lib/libicudata.a"

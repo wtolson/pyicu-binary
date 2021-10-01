@@ -21,19 +21,6 @@ jobs:
         uses: pypa/cibuildwheel@v2.1.2
         with:
           package-dir: ./build/PyICU-${{ env.PYICU_VERSION }}/
-        env:
-          CIBW_BEFORE_ALL_MACOS: "bash {project}/scripts/prepare-macos.sh"
-          CIBW_ENVIRONMENT_MACOS: PYICU_LFLAGS='{project}build/lib/libicui18n.a:{project}build/lib/libicuuc.a:{project}build/lib/libicudata.a'
-
-          CIBW_BEFORE_ALL_LINUX: "bash {project}/scripts/prepare-linux.sh"
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_I686_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_PYPY_X86_64_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_PPC64LE_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_S390X_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_PYPY_AARCH64_IMAGE: manylinux_2_24
-          CIBW_MANYLINUX_PYPY_I686_IMAGE: manylinux_2_24
 
       - uses: actions/upload-artifact@v2
         with:
