@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-10.15]
+        os: [ubuntu-20.04, macos-11]
 
     steps:
       - uses: actions/checkout@v2
@@ -36,6 +36,10 @@ jobs:
         uses: pypa/cibuildwheel@v2.1.2
         with:
           package-dir: ./src/PyICU-${{ env.PYICU_VERSION }}/
+        env:
+          CIBW_ENVIRONMENT_LINUX: >
+            PYICU_VERSION="${{ env.PYICU_VERSION }}"
+            ICU_VERSION="${{ env.ICU_VERSION }}"
 
       - uses: actions/upload-artifact@v2
         with:
