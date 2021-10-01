@@ -6,6 +6,9 @@ set -x
 PYTHON_BIN=/opt/python/cp39-cp39/bin
 BUILD_DIR="${PWD}/build"
 
+# Setup build dir
+mkdir -p "${BUILD_DIR}"
+
 # Download icu4c
 curl -L "https://github.com/unicode-org/icu/releases/download/release-${ICU_VERSION/_/-}/icu4c-${ICU_VERSION}-src.tgz" \
     > "${BUILD_DIR}/icu4c-${ICU_VERSION}-src.tgz"
