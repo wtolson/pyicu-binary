@@ -20,7 +20,7 @@ jobs:
       - name: Download source
         run: |
           mkdir -p src/
-          pip download \
+          PYICU_CFLAGS=dummy PYICU_LFLAGS=dummy pip download \
             --no-binary=:all: \
             --no-deps \
             --dest src/ \
