@@ -17,7 +17,7 @@ curl -L "https://github.com/unicode-org/icu/releases/download/release-${ICU_VERS
     > "${BUILD_DIR}/icu4c-${ICU_VERSION}-src.tgz.asc"
 
 # Verify
-gpg --import /build/KEYS
+gpg --import KEYS
 gpg --verify "${BUILD_DIR}/icu4c-${ICU_VERSION}-src.tgz.asc" "${BUILD_DIR}/icu4c-${ICU_VERSION}-src.tgz"
 
 # Unpack
